@@ -2,7 +2,7 @@
 # BASE
 # ----------------------------------------------
 rm(list=ls())
-source("./sandbox/daytona/trunk/base/init.r", chdir=TRUE)
+source("./trunk/base/init.r", chdir=TRUE)
 # ----------------------------------------------
 
 library("httr")
@@ -10,8 +10,8 @@ library("ncdf4")
 library("sp")
 library("rworldmap")
 
-rawPath = "../daytona/data/oco2/v8raw"
-savePath = "../daytona/data/oco2/v8rData/daily"
+rawPath = folders$rawData
+savePath = file.path(folders$ocoData, "daily")
 
 # ----------------------------------------------
 # DOWNLOAD MOST RECENT DATA
@@ -25,7 +25,7 @@ for(txtFile in txtFiles){
     tmp[endsWith(tmp$V1, ".nc4"), nc4 := V1][, V1 := NULL]
     tmp = tmp[!is.na(nc4)]
     downloadList = rbind(downloadList, tmp)
-    #rm(tmp)
+    rm(tmp)
 }
 
 downloadList = downloadList[!(duplicated(downloadList)|duplicated(downloadList, fromLast=TRUE))]
@@ -37,11 +37,20 @@ for(url in downloadList$nc4){
     if(file.exists(file.path(savePath, gsub(".nc4", ".rData", nc4Name))))
         next
     
-    print(paste(gsub(".nc4", ".rData", nc4Name), "does not exist. Processing."))
+    print(paste(gsub(".nc4", ".rData", nc4Name), "does not exist. Downloading."))
     
-    file = GET(url, authenticate(authUser, authPassword))
-    bin = content(file, "raw")
-    prec = nc_open(bin)
+    GET(url,
+        write_disk(file.path(folders$tmp, nc4Name), overwrite=TRUE),
+        authenticate(authUser, authPassword))
+    #METHOD 2:
+    #download.file(url, destfile = file.path(folders$tmp, nc4Name), method="wget", extra=paste0("--user=", authUser, " --password=", authPassword))
+    
+    print("Downloading completed. Processing.")
+    
+    
+    prec = nc_open(file.path(folders$tmp, nc4Name))
+    file.remove(file.path(folders$tmp, nc4Name))
+    
     lons = ncvar_get(prec,"longitude") 
     lats = ncvar_get(prec,"latitude")  
     time = ncvar_get(prec,"time") 
@@ -59,9 +68,10 @@ for(url in downloadList$nc4){
     
     tmp = cbind(tmp, iso3=iso3)
     
+    print("Processing completed. Saving.")
     saveData(tmp, file=file.path(savePath, gsub(".nc4", ".rData", nc4Name)))
     
-    rm(list = c("file", "bin", "tmp", "prec", "lons", "lats", "time", "xco2", "dat"))
+    rm(list = c("tmp", "prec", "lons", "lats", "time", "xco2", "dat"))
     gc()
 
 }

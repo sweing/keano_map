@@ -2,7 +2,7 @@
 # BASE
 # ----------------------------------------------
 rm(list=ls())
-source("./sandbox/daytona/trunk/base/init.r", chdir=TRUE)
+source("./trunk/base/init.r", chdir=TRUE)
 # ----------------------------------------------
 
 
@@ -18,7 +18,7 @@ countries = c("CHN", "USA", "IND", "RUS", "JPN", "DEU", "BRA", "KOR", "AUT", "FR
 
 
 fileName = paste0("rasterAnomalies", "_m", macroResolution, "_r", rasterResolution, "_", operation, ".rData")
-dataPath = "../daytona/data/oco2/v8rData/daily"
+dataPath = file.path(folders$ocoData, "daily")
 baseData = loadData(file.path(dataPath, fileName))
 
 

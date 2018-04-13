@@ -1,7 +1,8 @@
 folders = list(
     tmp         = "./tmp",
-    ocoData     = "../daytona/data/oco2/v8rData",
-    dataFolder  = "../daytona/data",
+    ocoData     = "../../daytona/data/oco2/v8rData",
+    rawData     = "../../daytona/data/oco2/v8raw",
+    dataFolder  = "../../daytona/data"
 )
 
 

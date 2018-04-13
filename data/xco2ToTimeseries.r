@@ -2,11 +2,13 @@
 # BASE
 # ----------------------------------------------
 rm(list=ls())
-source("./sandbox/daytona/trunk/base/init.r", chdir=TRUE)
+source("./trunk/base/init.r", chdir=TRUE)
 # ----------------------------------------------
 
-dataPath = "../daytona/data/oco2/v8rData/daily"
+dataPath = file.path(folders$ocoData, "daily")
 baseData = loadData(file.path(dataPath, "rasterXco2.rData"))
+baseData[, id := .GRP, by = .(rasterLats, rasterLons)]
+
 
 baseData[, tmp := xco2-shift(xco2, n = 1L, type="lag", fill = 0), by=c("iso3", "rasterLats", "rasterLons")]
 baseData[xco2 != tmp, skip := 1:.N, by=c("iso3")]

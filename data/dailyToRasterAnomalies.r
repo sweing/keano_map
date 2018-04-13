@@ -2,10 +2,10 @@
 # BASE
 # ----------------------------------------------
 rm(list=ls())
-source("./sandbox/daytona/trunk/base/init.r", chdir=TRUE)
+source("./trunk/base/init.r", chdir=TRUE)
 # ----------------------------------------------
 
-dataPath = "../daytona/data/oco2/v8rData/daily"
+dataPath = file.path(folders$ocoData, "daily")
 dataFiles = list.files(dataPath, pattern = "\\.rData$")
 dataFiles = dataFiles[startsWith(dataFiles, "oco2_LtCO2_")]
 
@@ -13,7 +13,7 @@ dataFiles = dataFiles[startsWith(dataFiles, "oco2_LtCO2_")]
 # CONFIG
 # ----------------------------------------------
 macroResolution = 2
-rasterResolution = 0.1
+rasterResolution = 0.2
 operations = c("median", "mean")
 # ----------------------------------------------
 
@@ -31,6 +31,7 @@ for(operation in operations){
         #dataFile = "oco2_LtCO2_161230_B8100r_171007005500s.rData"
         print(dataFile)
         tmp = loadData(file.path(dataPath, dataFile))
+        #DROP ANTARCTICA
         #tmp = tmp[!is.na(iso3) & iso3 != "ATA"]
         tmp$rasterLats = rasterResolution*round(tmp$lats/rasterResolution)
         tmp$rasterLons = rasterResolution*round(tmp$lons/rasterResolution)
@@ -59,6 +60,7 @@ for(operation in operations){
         #tmp = tmp[, anomaly := xco2 - operationFunction(xco2)]
         tmp = tmp[!is.na(iso3)]
         tmp = tmp[, .(anomaly = mean(anomaly)), by=.(rasterLats, rasterLons, date, iso3)]
+        tmp[, anomaly := removeOutliers(anomaly)]
         finalData = rbind(finalData, tmp)
         rm(tmp)
     }
