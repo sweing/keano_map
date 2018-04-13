@@ -2,10 +2,10 @@
 # BASE
 # ----------------------------------------------
 rm(list=ls())
-source("./sandbox/daytona/trunk/base/init.r", chdir=TRUE)
+source("./trunk/base/init.r", chdir=TRUE)
 # ----------------------------------------------
 #library(Hmisc)
-dataPath = "../daytona/data/oco2/v8rData/daily"
+dataPath = file.path(folders$ocoData, "daily")
 baseData = loadData(file.path(dataPath, "median_anomalies.rData"))
 
 baseData[, tmp := anomaly-shift(anomaly, n = 1L, type="lag", fill = 0), by=c("iso3", "rasterLats", "rasterLons")]

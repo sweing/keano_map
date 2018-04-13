@@ -2,10 +2,10 @@
 # BASE
 # ----------------------------------------------
 rm(list=ls())
-source("./sandbox/daytona/trunk/base/init.r", chdir=TRUE)
+source("./trunk/base/init.r", chdir=TRUE)
 # ----------------------------------------------
 
-dataPath = "../daytona/data/oco2/v8rData/daily"
+dataPath = file.path(folders$ocoData, "daily")
 dataFiles = list.files(dataPath, pattern = "\\.rData$")
 dataFiles = dataFiles[startsWith(dataFiles, "oco2_LtCO2_")]
 
