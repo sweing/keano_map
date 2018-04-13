@@ -1,5 +1,5 @@
 removeOutliers <-  function(x, na.rm = TRUE, ...) {
-    qnt <- quantile(x, probs=c(.25, .75), na.rm = na.rm, ...)
+    qnt <- quantile(x, probs=c(.1, .9), na.rm = na.rm, ...)
     H <- 1.5 * IQR(x, na.rm = na.rm)
     y <- x
     y[x < (qnt[1] - H)] <- NA
