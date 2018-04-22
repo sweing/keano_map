@@ -1,17 +1,10 @@
 folders = list(
     tmp         = "./tmp",
-    ocoData     = "../../daytona/data/oco2/v8rData",
-    rawData     = "../../daytona/data/oco2/v8raw",
-    dataFolder  = "../../daytona/data"
+    ocoData     = "./tmp/data/oco2/v8rData",
+    rawData     = "./tmp/data/oco2/v8raw",
+    dataFolder  = "./tmp/data"
 )
 
-
-# ----------------------------------------------
-# MAKE 1° GRID + ID
-# ----------------------------------------------
-grid = expand.grid(lats = c(-90:90), lons = c(-180:180))
-grid$id = 1:nrow(grid)
-# ----------------------------------------------
 
 countryGroups = list(
     EU28 = c("AUT", "BEL", "DEU", "DNK", "ESP", "FIN", "FRA", "GBR", 

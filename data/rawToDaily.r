@@ -5,10 +5,9 @@ rm(list=ls())
 source("./trunk/base/init.r", chdir=TRUE)
 # ----------------------------------------------
 
-library("httr")
-library("ncdf4")  
-library("sp")
-library("rworldmap")
+loadPackages("ncdf4")  
+loadPackages("sp")
+loadPackages("rworldmap")
 
 rawPath = folders$rawData
 savePath = file.path(folders$ocoData, "daily")
@@ -38,12 +37,12 @@ for(url in downloadList$nc4){
         next
     
     print(paste(gsub(".nc4", ".rData", nc4Name), "does not exist. Downloading."))
-    
-    GET(url,
-        write_disk(file.path(folders$tmp, nc4Name), overwrite=TRUE),
-        authenticate(authUser, authPassword))
-    #METHOD 2:
-    #download.file(url, destfile = file.path(folders$tmp, nc4Name), method="wget", extra=paste0("--user=", authUser, " --password=", authPassword))
+
+    download.file(url, 
+                  destfile = file.path(folders$tmp, nc4Name), 
+                  quiet = TRUE,
+                  method="wget", 
+                  extra=paste0("--user=", authUser, " --password=", authPassword))
     
     print("Downloading completed. Processing.")
     
@@ -75,4 +74,6 @@ for(url in downloadList$nc4){
     gc()
 
 }
+
+print("No more jobs.")
 # ----------------------------------------------
