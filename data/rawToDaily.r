@@ -12,6 +12,9 @@ loadPackages("rworldmap")
 rawPath = folders$rawData
 savePath = file.path(folders$ocoData, "daily")
 
+#REMOVE RAW FILE AFTER DOWNLOAD?
+removeRawFile = TRUE
+
 # ----------------------------------------------
 # DOWNLOAD MOST RECENT DATA
 # ----------------------------------------------
@@ -39,7 +42,7 @@ for(url in downloadList$nc4){
     print(paste(gsub(".nc4", ".rData", nc4Name), "does not exist. Downloading."))
 
     download.file(url, 
-                  destfile = file.path(folders$tmp, nc4Name), 
+                  destfile = file.path(folders$rawData, nc4Name), 
                   quiet = TRUE,
                   method="wget", 
                   extra=paste0("--user=", authUser, " --password=", authPassword))
@@ -47,8 +50,9 @@ for(url in downloadList$nc4){
     print("Downloading completed. Processing.")
     
     
-    prec = nc_open(file.path(folders$tmp, nc4Name))
-    file.remove(file.path(folders$tmp, nc4Name))
+    prec = nc_open(file.path(folders$rawData, nc4Name))
+    if(removeRawFile)
+        file.remove(file.path(folders$rawData, nc4Name))
     
     lons = ncvar_get(prec,"longitude") 
     lats = ncvar_get(prec,"latitude")  
@@ -74,6 +78,5 @@ for(url in downloadList$nc4){
     gc()
 
 }
-
-print("No more jobs.")
 # ----------------------------------------------
+print("Jobs done.")

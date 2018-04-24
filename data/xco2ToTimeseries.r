@@ -26,6 +26,10 @@ baseData[, cummean := cumsum(tmp)/(seq_along(tmp)-skip), by=c("iso3")][, `:=` (s
 selected = c("CHN", "USA", "IND", "RUS", "JPN", "DEU", "IRN", "AUT", "FRA", "AUS", "BRA", "PRK")
 plotData = baseData[iso3 %in% selected & date > "2014-12-31"]
 
+
+# ----------------------------------------------
+# PLOT AND SAVE
+# ----------------------------------------------
 ggplot(data = plotData, aes(x=date, y=cummean, group=iso3))+
     #geom_smooth(method = "lm")+
     geom_line(stat = "identity")+
@@ -38,4 +42,5 @@ ggplot(data = plotData, aes(x=date, y=cummean, group=iso3))+
 file = file.path(folders$tmp, "plots", "xco2.png")
 
 ggsave(file, width = 10, height = 5, units="in")
-
+# ----------------------------------------------
+print("Jobs done.")
