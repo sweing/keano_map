@@ -2,6 +2,8 @@ folders = list(
     tmp         = "./tmp",
     ocoData     = "./tmp/data/oco2/v8rData",
     rawData     = "./tmp/data/oco2/v8raw",
+    s5pData     = "./tmp/data/s5p",
+    gome2Data     = "./tmp/data/gome2",
     dataFolder  = "./tmp/data"
 )
 

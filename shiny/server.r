@@ -2,8 +2,7 @@
 # BASE
 # ----------------------------------------------
 rm(list=ls())
-setwd("/mnt/data/stefan/Projects/GitHub/oco_daytona")
-source("./trunk/base/init.r", chdir=TRUE)
+
 loadPackages(c("shiny", "leaflet", "plotly"))
 # ----------------------------------------------
 
